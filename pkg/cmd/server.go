@@ -11,6 +11,7 @@ import (
 
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/protocol/grpc"
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/service/v1"
+	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/service/v2"
 )
 
 // Config is configuration for Server
@@ -64,6 +65,7 @@ func RunServer() error {
 	defer db.Close()
 
 	v1API := v1.NewToDoServiceServer(db)
+	v2API := v2.NewToDoServiceServer(db)
 
-	return grpc.RunServer(ctx, v1API, cfg.GRPCPort)
+	return grpc.RunServer(ctx, v1API, v2API, cfg.GRPCPort)
 }

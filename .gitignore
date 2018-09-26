@@ -3,4 +3,5 @@ go.mod
 go.sum
 third_party/
 cmd/client-grpc/client-grpc
+cmd/client-grpc-v2/client-grpc-v2
 cmd/server/server
