@@ -36,8 +36,103 @@ message CreateResponse{
     string message = 4;
 }
 
+// Request data to read todo task
+message ReadRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique integer identifier of the todo task
+    int64 id = 2;
+}
+
+// Contains todo task data specified in by ID request
+message ReadResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity read by ID
+    ToDo toDo = 2;
+
+    // Message: Add V2 API
+    string message = 3;
+}
+
+// Request data to update todo task
+message UpdateRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity to update
+    ToDo toDo = 2;
+}
+
+// Contains status of update operation
+message UpdateResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Contains number of entities have beed updated
+    // Equals 1 in case of succesfull update
+    int64 updated = 2;
+
+    // Message: Add V2 API
+    string message = 3;
+}
+
+// Request data to delete todo task
+message DeleteRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique integer identifier of the todo task to delete
+    int64 id = 2;
+}
+
+// Contains status of delete operation
+message DeleteResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Contains number of entities have beed deleted
+    // Equals 1 in case of succesfull delete
+    int64 deleted = 2;
+
+    // Message: Add V2 API
+    string message = 3;
+}
+
+// Request data to read all todo task
+message ReadAllRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+}
+
+// Contains list of all todo tasks
+message ReadAllResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // List of all todo tasks
+    repeated ToDo toDos = 2;
+
+    // Message: Add V2 API
+    string message = 3;
+}
+
 // Service to manage list of todo tasks
 service ToDoService {
     // Create new todo task
     rpc Create(CreateRequest) returns (CreateResponse);
+
+    // Read todo task
+    rpc Read(ReadRequest) returns (ReadResponse);
+
+    // Update todo task
+    rpc Update(UpdateRequest) returns (UpdateResponse);
+
+    // Delete todo task
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+
+    // Read all todo tasks
+    rpc ReadAll(ReadAllRequest) returns (ReadAllResponse);
 }

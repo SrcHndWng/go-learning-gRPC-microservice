@@ -52,53 +52,53 @@ func main() {
 	}
 	log.Printf("Create result: <%+v>\n\n", res1)
 
-	// id := res1.Id
+	id := res1.Id
 
-	// // Read
-	// req2 := v2.ReadRequest{
-	// 	Api: apiVersion,
-	// 	Id:  id,
-	// }
-	// res2, err := c.Read(ctx, &req2)
-	// if err != nil {
-	// 	log.Fatalf("Read failed: %v", err)
-	// }
-	// log.Printf("Read result: <%+v>\n\n", res2)
+	// Read
+	req2 := v2.ReadRequest{
+		Api: apiVersion,
+		Id:  id,
+	}
+	res2, err := c.Read(ctx, &req2)
+	if err != nil {
+		log.Fatalf("Read failed: %v", err)
+	}
+	log.Printf("Read result: <%+v>\n\n", res2)
 
-	// // Update
-	// req3 := v2.UpdateRequest{
-	// 	Api: apiVersion,
-	// 	ToDo: &v2.ToDo{
-	// 		Id:          res2.ToDo.Id,
-	// 		Title:       res2.ToDo.Title,
-	// 		Description: res2.ToDo.Description + " + updated",
-	// 		Reminder:    res2.ToDo.Reminder,
-	// 	},
-	// }
-	// res3, err := c.Update(ctx, &req3)
-	// if err != nil {
-	// 	log.Fatalf("Update failed: %v", err)
-	// }
-	// log.Printf("Update result: <%+v>\n\n", res3)
+	// Update
+	req3 := v2.UpdateRequest{
+		Api: apiVersion,
+		ToDo: &v2.ToDo{
+			Id:          res2.ToDo.Id,
+			Title:       res2.ToDo.Title,
+			Description: res2.ToDo.Description + " + updated",
+			Reminder:    res2.ToDo.Reminder,
+		},
+	}
+	res3, err := c.Update(ctx, &req3)
+	if err != nil {
+		log.Fatalf("Update failed: %v", err)
+	}
+	log.Printf("Update result: <%+v>\n\n", res3)
 
-	// // Call ReadAll
-	// req4 := v2.ReadAllRequest{
-	// 	Api: apiVersion,
-	// }
-	// res4, err := c.ReadAll(ctx, &req4)
-	// if err != nil {
-	// 	log.Fatalf("ReadAll failed: %v", err)
-	// }
-	// log.Printf("ReadAll result: <%+v>\n\n", res4)
+	// Call ReadAll
+	req4 := v2.ReadAllRequest{
+		Api: apiVersion,
+	}
+	res4, err := c.ReadAll(ctx, &req4)
+	if err != nil {
+		log.Fatalf("ReadAll failed: %v", err)
+	}
+	log.Printf("ReadAll result: <%+v>\n\n", res4)
 
-	// // Delete
-	// req5 := v2.DeleteRequest{
-	// 	Api: apiVersion,
-	// 	Id:  id,
-	// }
-	// res5, err := c.Delete(ctx, &req5)
-	// if err != nil {
-	// 	log.Fatalf("Delete failed: %v", err)
-	// }
-	// log.Printf("Delete result: <%+v>\n\n", res5)
+	// Delete
+	req5 := v2.DeleteRequest{
+		Api: apiVersion,
+		Id:  id,
+	}
+	res5, err := c.Delete(ctx, &req5)
+	if err != nil {
+		log.Fatalf("Delete failed: %v", err)
+	}
+	log.Printf("Delete result: <%+v>\n\n", res5)
 }
