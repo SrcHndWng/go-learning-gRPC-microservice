@@ -9,6 +9,7 @@ import (
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
 
+	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/logger"
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/protocol/grpc"
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/protocol/rest"
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/service/v1"
@@ -34,6 +35,12 @@ type Config struct {
 	DatastoreDBPassword string
 	// DatastoreDBSchema is schema of database
 	DatastoreDBSchema string
+
+	// Log parameters section
+	// LogLevel is global log level: Debug(-1), Info(0), Warn(1), Error(2), DPanic(3), Panic(4), Fatal(5)
+	LogLevel int
+	// LogTimeFormat is print time format for logger e.g. 2006-01-02T15:04:05Z07:00
+	LogTimeFormat string
 }
 
 // RunServer runs gRPC server and HTTP gateway
@@ -48,6 +55,9 @@ func RunServer() error {
 	flag.StringVar(&cfg.DatastoreDBUser, "db-user", "", "Database user")
 	flag.StringVar(&cfg.DatastoreDBPassword, "db-password", "", "Database password")
 	flag.StringVar(&cfg.DatastoreDBSchema, "db-schema", "", "Database schema")
+	flag.IntVar(&cfg.LogLevel, "log-level", 0, "Global log level")
+	flag.StringVar(&cfg.LogTimeFormat, "log-time-format", "",
+		"Print time format for logger e.g. 2006-01-02T15:04:05Z07:00")
 	flag.Parse()
 
 	if len(cfg.GRPCPort) == 0 {
@@ -56,6 +66,11 @@ func RunServer() error {
 
 	if len(cfg.HTTPPort) == 0 {
 		return fmt.Errorf("invalid TCP port for HTTP gateway: '%s'", cfg.HTTPPort)
+	}
+
+	// initialize logger
+	if err := logger.Init(cfg.LogLevel, cfg.LogTimeFormat); err != nil {
+		return fmt.Errorf("failed to initialize logger: %v", err)
 	}
 
 	// add MySQL driver specific parameter to parse date/time

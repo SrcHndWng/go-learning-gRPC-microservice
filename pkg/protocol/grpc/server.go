@@ -2,13 +2,14 @@ package grpc
 
 import (
 	"context"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/api/v1"
 	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/api/v2"
+	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/logger"
+	"github.com/SrcHndWng/go-learning-gRPC-microservice/pkg/protocol/grpc/middleware"
 	"google.golang.org/grpc"
 )
 
@@ -19,8 +20,14 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, v2API v2.ToDoSer
 		return err
 	}
 
+	// gRPC server statup options
+	opts := []grpc.ServerOption{}
+
+	// add middleware
+	opts = middleware.AddLogging(logger.Log, opts)
+
 	// register service
-	server := grpc.NewServer()
+	server := grpc.NewServer(opts...)
 	v1.RegisterToDoServiceServer(server, v1API)
 	v2.RegisterToDoServiceServer(server, v2API)
 
@@ -30,7 +37,7 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, v2API v2.ToDoSer
 	go func() {
 		for range c {
 			// sig is a ^C, handle it
-			log.Println("shutting down gRPC server...")
+			logger.Log.Warn("shutting down gRPC server...")
 
 			server.GracefulStop()
 
@@ -39,6 +46,6 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, v2API v2.ToDoSer
 	}()
 
 	// start gRPC server
-	log.Println("starting gRPC server...")
+	logger.Log.Info("starting gRPC server...")
 	return server.Serve(listen)
 }
